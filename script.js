@@ -77,6 +77,12 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
+// Format time in 24-hour format
+function formatTime24(time) {
+    // time is already in HH:mm format from the input
+    return time;
+}
+
 // Update month display
 function updateMonthDisplay() {
     const month = monthNames[currentDate.getMonth()];
@@ -89,7 +95,7 @@ function updateMonthDisplay() {
     document.getElementById('entryDate').value = dateString;
 }
 
-// Set default time to current time
+// Set default time to current time in 24-hour format
 function updateTimeDisplay() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -119,7 +125,7 @@ function addEntry() {
     const entry = {
         id: Date.now(),
         date: date,
-        time: time,
+        time: formatTime24(time), // Ensure 24-hour format
         description: description,
         type: type,
         amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
