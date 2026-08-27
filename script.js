@@ -9,6 +9,8 @@ const monthNames = [
 ];
 
 let currentDate = new Date();
+let editingEntryId = null; // Track which entry is being edited
+let editingEntryDate = null; // Track the original date of the entry being edited
 
 // Cookie management functions
 function setCookie(name, value, days = 365) {
@@ -103,7 +105,46 @@ function updateTimeDisplay() {
     document.getElementById('entryTime').value = `${hours}:${minutes}`;
 }
 
-// Add entry
+// Edit entry
+function editEntry(entryId) {
+    const monthData = getMonthData(currentDate);
+    const entry = monthData.find(e => e.id === entryId);
+    
+    if (!entry) return;
+    
+    // Fill form with entry data
+    document.getElementById('entryDate').value = entry.date;
+    document.getElementById('entryTime').value = entry.time;
+    document.getElementById('entryDescription').value = entry.description;
+    document.getElementById('entryType').value = entry.type;
+    document.getElementById('entryAmount').value = Math.abs(entry.amount);
+    
+    // Set editing mode
+    editingEntryId = entryId;
+    editingEntryDate = entry.date;
+    
+    // Update button text and visibility
+    document.getElementById('formTitle').textContent = 'Upravit položku';
+    document.getElementById('addEntryBtn').textContent = 'Uložit';
+    document.getElementById('cancelEditBtn').style.display = 'inline-block';
+    
+    // Scroll to form
+    document.querySelector('.add-entry-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Cancel editing
+function cancelEdit() {
+    editingEntryId = null;
+    editingEntryDate = null;
+    clearForm();
+    
+    // Reset button text and visibility
+    document.getElementById('formTitle').textContent = 'Přidat položku';
+    document.getElementById('addEntryBtn').textContent = 'Přidat';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+}
+
+// Add or update entry
 function addEntry() {
     const date = document.getElementById('entryDate').value;
     const time = document.getElementById('entryTime').value;
@@ -116,27 +157,68 @@ function addEntry() {
         return;
     }
 
-    const entryDate = new Date(date);
-    const monthData = getMonthData(entryDate);
+    if (editingEntryId !== null) {
+        // Update existing entry
+        updateEntry(editingEntryId, editingEntryDate, date, time, description, type, amount);
+        cancelEdit();
+    } else {
+        // Add new entry
+        const entryDate = new Date(date);
+        const monthData = getMonthData(entryDate);
 
+        // Determine if it's income or expense
+        const isIncome = type === 'Pravidelný příjem' || type === 'Nepravidelný příjem';
+        
+        const entry = {
+            id: Date.now(),
+            date: date,
+            time: formatTime24(time), // Ensure 24-hour format
+            description: description,
+            type: type,
+            amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
+        };
+
+        monthData.push(entry);
+        monthData.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+        saveData();
+        clearForm();
+    }
+    
+    renderMonth();
+}
+
+// Update entry
+function updateEntry(entryId, oldDate, newDate, time, description, type, amount) {
+    const oldDateObj = new Date(oldDate);
+    const newDateObj = new Date(newDate);
+    const oldMonthData = getMonthData(oldDateObj);
+    const newMonthData = getMonthData(newDateObj);
+    
+    // Find and remove entry from old month
+    const index = oldMonthData.findIndex(e => e.id === entryId);
+    if (index !== -1) {
+        oldMonthData.splice(index, 1);
+    }
+    
     // Determine if it's income or expense
     const isIncome = type === 'Pravidelný příjem' || type === 'Nepravidelný příjem';
     
-    const entry = {
-        id: Date.now(),
-        date: date,
-        time: formatTime24(time), // Ensure 24-hour format
+    // Create updated entry
+    const updatedEntry = {
+        id: entryId,
+        date: newDate,
+        time: formatTime24(time),
         description: description,
         type: type,
         amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
     };
-
-    monthData.push(entry);
-    monthData.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-
+    
+    // Add to new month
+    newMonthData.push(updatedEntry);
+    newMonthData.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+    
     saveData();
-    clearForm();
-    renderMonth();
 }
 
 // Delete entry
@@ -155,6 +237,7 @@ function clearForm() {
     document.getElementById('entryDescription').value = '';
     document.getElementById('entryType').value = '';
     document.getElementById('entryAmount').value = '';
+    updateMonthDisplay();
     updateTimeDisplay();
 }
 
@@ -268,6 +351,7 @@ function renderEntriesList(entries) {
             <div class="entry-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '+' : ''}${formatCurrency(entry.amount)}</div>
             <div class="entry-balance">${formatCurrency(runningBalance)}</div>
             <div class="entry-actions">
+                <button class="btn-edit" onclick="editEntry(${entry.id})">Upravit</button>
                 <button class="btn-delete" onclick="deleteEntry(${entry.id})">Smazat</button>
             </div>
         `;
@@ -290,6 +374,7 @@ function goToNextMonth() {
 
 // Event listeners
 document.getElementById('addEntryBtn').addEventListener('click', addEntry);
+document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 document.getElementById('prevMonth').addEventListener('click', goToPreviousMonth);
 document.getElementById('nextMonth').addEventListener('click', goToNextMonth);
 
