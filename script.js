@@ -10,17 +10,49 @@ const monthNames = [
 
 let currentDate = new Date();
 
-// Load data from localStorage
+// Cookie management functions
+function setCookie(name, value, days = 365) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = 'expires=' + date.toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + ';' + expires + ';path=/';
+}
+
+function getCookie(name) {
+    const nameEQ = name + '=';
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i].trim();
+        if (cookie.indexOf(nameEQ) === 0) {
+            return decodeURIComponent(cookie.substring(nameEQ.length));
+        }
+    }
+    return null;
+}
+
+function deleteCookie(name) {
+    setCookie(name, '', -1);
+}
+
+// Load data from localStorage first, then from cookies as fallback
 function loadData() {
     const saved = localStorage.getItem('financeTrackerData');
     if (saved) {
         data = JSON.parse(saved);
+    } else {
+        // Fallback to cookie if localStorage is not available
+        const cookieData = getCookie('financeTrackerData');
+        if (cookieData) {
+            data = JSON.parse(cookieData);
+        }
     }
 }
 
-// Save data to localStorage
+// Save data to both localStorage and cookies
 function saveData() {
-    localStorage.setItem('financeTrackerData', JSON.stringify(data));
+    const dataString = JSON.stringify(data);
+    localStorage.setItem('financeTrackerData', dataString);
+    setCookie('financeTrackerData', dataString, 365); // Store for 1 year
 }
 
 // Get month key
