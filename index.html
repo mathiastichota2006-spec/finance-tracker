@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanční Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Finanční Tracker</h1>
+            <div class="month-selector">
+                <button id="prevMonth" class="month-btn">← Předchozí</button>
+                <span id="currentMonth" class="current-month"></span>
+                <button id="nextMonth" class="month-btn">Další →</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Add Entry Form -->
+            <section class="add-entry-section">
+                <h2>Přidat položku</h2>
+                <div class="form-group">
+                    <label for="entryDate">Datum:</label>
+                    <input type="date" id="entryDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="entryTime">Čas:</label>
+                    <input type="time" id="entryTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="entryDescription">Popis:</label>
+                    <input type="text" id="entryDescription" placeholder="např. Nákup potravin" required>
+                </div>
+                <div class="form-group">
+                    <label for="entryType">Typ:</label>
+                    <select id="entryType" required>
+                        <option value="">-- Vyberte typ --</option>
+                        <option value="Nákupy">Nákupy</option>
+                        <option value="Doprava">Doprava</option>
+                        <option value="Online nákupy">Online nákupy</option>
+                        <option value="Tabák">Tabák</option>
+                        <option value="Předplatné">Předplatné</option>
+                        <option value="Příjmy">Příjmy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="entryAmount">Částka:</label>
+                    <input type="number" id="entryAmount" step="0.01" placeholder="0.00" required>
+                </div>
+                <button id="addEntryBtn" class="btn-primary">Přidat</button>
+            </section>
+
+            <!-- Summary Section -->
+            <section class="summary-section">
+                <h2>Přehled</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <span class="summary-label">Počáteční zůstatek:</span>
+                        <span id="startingBalance" class="summary-value">0.00 Kč</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Celkové příjmy:</span>
+                        <span id="totalIncome" class="summary-value income">0.00 Kč</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Celkové výdaje:</span>
+                        <span id="totalExpenses" class="summary-value expense">0.00 Kč</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Aktuální zůstatek:</span>
+                        <span id="currentBalance" class="summary-value">0.00 Kč</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category Breakdown -->
+            <section class="category-section">
+                <h2>Výdaje podle kategorií</h2>
+                <div id="categoryBreakdown" class="category-list"></div>
+            </section>
+
+            <!-- Entries Log -->
+            <section class="entries-section">
+                <h2>Položky</h2>
+                <div id="entriesList" class="entries-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
