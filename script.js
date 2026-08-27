@@ -36,6 +36,37 @@ function deleteCookie(name) {
     setCookie(name, '', -1);
 }
 
+// Theme management functions
+function initializeTheme() {
+    const savedTheme = getCookie('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDarkTheme = savedTheme ? savedTheme === 'dark' : prefersDark;
+    
+    if (isDarkTheme) {
+        document.body.classList.add('dark-theme');
+        document.getElementById('themeToggle').checked = true;
+        updateThemeIcon(true);
+    } else {
+        document.body.classList.remove('dark-theme');
+        document.getElementById('themeToggle').checked = false;
+        updateThemeIcon(false);
+    }
+}
+
+function toggleTheme() {
+    const isDarkTheme = document.body.classList.toggle('dark-theme');
+    document.getElementById('themeToggle').checked = isDarkTheme;
+    setCookie('theme', isDarkTheme ? 'dark' : 'light', 365);
+    updateThemeIcon(isDarkTheme);
+}
+
+function updateThemeIcon(isDark) {
+    const icon = document.querySelector('.theme-icon');
+    if (icon) {
+        icon.textContent = isDark ? '☀️' : '🌙';
+    }
+}
+
 // Load data from localStorage first, then from cookies as fallback
 function loadData() {
     const saved = localStorage.getItem('financeTrackerData');
@@ -377,9 +408,11 @@ document.getElementById('addEntryBtn').addEventListener('click', addEntry);
 document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 document.getElementById('prevMonth').addEventListener('click', goToPreviousMonth);
 document.getElementById('nextMonth').addEventListener('click', goToNextMonth);
+document.getElementById('themeToggle').addEventListener('change', toggleTheme);
 
 // Initialize
 loadData();
+initializeTheme();
 updateMonthDisplay();
 updateTimeDisplay();
 renderMonth();
