@@ -113,13 +113,16 @@ function addEntry() {
     const entryDate = new Date(date);
     const monthData = getMonthData(entryDate);
 
+    // Determine if it's income or expense
+    const isIncome = type === 'Pravidelný příjem' || type === 'Nepravidelný příjem';
+    
     const entry = {
         id: Date.now(),
         date: date,
         time: time,
         description: description,
         type: type,
-        amount: type === 'Příjmy' ? Math.abs(amount) : -Math.abs(amount)
+        amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
     };
 
     monthData.push(entry);
@@ -189,7 +192,7 @@ function renderSummary(entries) {
     document.getElementById('currentBalance').textContent = formatCurrency(currentBalance);
 }
 
-// Render category breakdown
+// Render category breakdown - sorted by total expenses
 function renderCategoryBreakdown(entries) {
     const categories = {};
 
@@ -211,7 +214,7 @@ function renderCategoryBreakdown(entries) {
     }
 
     Object.entries(categories)
-        .sort((a, b) => b[1] - a[1])
+        .sort((a, b) => b[1] - a[1]) // Sort by total expenses descending
         .forEach(([category, amount]) => {
             const categoryItem = document.createElement('div');
             categoryItem.className = 'category-item';
