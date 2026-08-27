@@ -9,7 +9,15 @@
 <body>
     <div class="container">
         <header>
-            <h1>Finanční Tracker</h1>
+            <div class="header-top">
+                <h1>Finanční Tracker</h1>
+                <div class="theme-toggle">
+                    <input type="checkbox" id="themeToggle" class="theme-toggle-checkbox">
+                    <label for="themeToggle" class="theme-toggle-label">
+                        <span class="theme-icon">🌙</span>
+                    </label>
+                </div>
+            </div>
             <div class="month-selector">
                 <button id="prevMonth" class="month-btn">← Předchozí</button>
                 <span id="currentMonth" class="current-month"></span>
