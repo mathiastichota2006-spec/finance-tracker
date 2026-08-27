@@ -4,10 +4,55 @@
     box-sizing: border-box;
 }
 
+/* Light theme colors (default) */
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8f9fa;
+    --text-primary: #333;
+    --text-secondary: #7f8c8d;
+    --text-header: #2c3e50;
+    --header-bg: #2c3e50;
+    --border-color: #ddd;
+    --accent-color: #3498db;
+    --accent-dark: #2980b9;
+    --success-color: #27ae60;
+    --success-dark: #229954;
+    --danger-color: #e74c3c;
+    --danger-dark: #c0392b;
+    --neutral-color: #95a5a6;
+    --neutral-dark: #7f8c8d;
+    --card-shadow: rgba(0, 0, 0, 0.05);
+    --box-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme colors */
+body.dark-theme {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #e8e8e8;
+    --text-secondary: #a0a0a0;
+    --text-header: #f0f0f0;
+    --header-bg: #1a1a1a;
+    --border-color: #444;
+    --accent-color: #4db8ff;
+    --accent-dark: #66c2ff;
+    --success-color: #47d764;
+    --success-dark: #5ae377;
+    --danger-color: #ff6b6b;
+    --danger-dark: #ff8585;
+    --neutral-color: #6b7280;
+    --neutral-dark: #8b95a5;
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --box-shadow: rgba(0, 0, 0, 0.4);
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -17,18 +62,68 @@ body {
 }
 
 header {
-    background-color: #2c3e50;
+    background-color: var(--header-bg);
     color: white;
     padding: 30px 20px;
     border-radius: 8px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--box-shadow);
+    transition: background-color 0.3s ease;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 header h1 {
     font-size: 2.5em;
-    margin-bottom: 20px;
     text-align: center;
+    flex: 1;
+}
+
+/* Theme Toggle Styles */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.theme-toggle-checkbox {
+    display: none;
+}
+
+.theme-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1.5em;
+}
+
+.theme-toggle-label:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.theme-toggle-checkbox:checked ~ .theme-toggle-label {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.theme-toggle-label .theme-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-checkbox:checked ~ .theme-toggle-label .theme-icon {
+    content: '☀️';
 }
 
 .month-selector {
@@ -39,7 +134,7 @@ header h1 {
 }
 
 .month-btn {
-    background-color: #3498db;
+    background-color: var(--accent-color);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -50,7 +145,7 @@ header h1 {
 }
 
 .month-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--accent-dark);
 }
 
 .current-month {
@@ -67,17 +162,19 @@ main {
 }
 
 section {
-    background-color: white;
+    background-color: var(--bg-secondary);
     padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px var(--card-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 section h2 {
     margin-bottom: 20px;
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
+    color: var(--text-header);
+    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
 /* Form Styles */
@@ -95,23 +192,31 @@ section h2 {
 
 .form-group label {
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-header);
+    transition: color 0.3s ease;
 }
 
 .form-group input,
 .form-group select {
     padding: 10px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 1em;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: var(--accent-color);
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+body.dark-theme .form-group input:focus,
+body.dark-theme .form-group select:focus {
+    box-shadow: 0 0 5px rgba(77, 184, 255, 0.3);
 }
 
 .form-buttons {
@@ -120,7 +225,7 @@ section h2 {
 }
 
 .btn-primary {
-    background-color: #27ae60;
+    background-color: var(--success-color);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -132,11 +237,11 @@ section h2 {
 }
 
 .btn-primary:hover {
-    background-color: #229954;
+    background-color: var(--success-dark);
 }
 
 .btn-cancel {
-    background-color: #95a5a6;
+    background-color: var(--neutral-color);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -148,11 +253,11 @@ section h2 {
 }
 
 .btn-cancel:hover {
-    background-color: #7f8c8d;
+    background-color: var(--neutral-dark);
 }
 
 .btn-edit {
-    background-color: #3498db;
+    background-color: var(--accent-color);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -163,11 +268,11 @@ section h2 {
 }
 
 .btn-edit:hover {
-    background-color: #2980b9;
+    background-color: var(--accent-dark);
 }
 
 .btn-delete {
-    background-color: #e74c3c;
+    background-color: var(--danger-color);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -179,7 +284,7 @@ section h2 {
 }
 
 .btn-delete:hover {
-    background-color: #c0392b;
+    background-color: var(--danger-dark);
 }
 
 /* Summary Styles */
@@ -190,34 +295,37 @@ section h2 {
 }
 
 .summary-card {
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid var(--accent-color);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition: background-color 0.3s ease, border-left-color 0.3s ease;
 }
 
 .summary-label {
     font-size: 0.9em;
-    color: #7f8c8d;
+    color: var(--text-secondary);
     font-weight: 600;
     text-transform: uppercase;
+    transition: color 0.3s ease;
 }
 
 .summary-value {
     font-size: 1.8em;
     font-weight: bold;
-    color: #2c3e50;
+    color: var(--text-header);
+    transition: color 0.3s ease;
 }
 
 .summary-value.income {
-    color: #27ae60;
+    color: var(--success-color);
 }
 
 .summary-value.expense {
-    color: #e74c3c;
+    color: var(--danger-color);
 }
 
 /* Category Breakdown */
@@ -228,24 +336,27 @@ section h2 {
 }
 
 .category-item {
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     padding: 15px;
     border-radius: 8px;
-    border-left: 4px solid #e74c3c;
+    border-left: 4px solid var(--danger-color);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    transition: background-color 0.3s ease, border-left-color 0.3s ease;
 }
 
 .category-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-header);
+    transition: color 0.3s ease;
 }
 
 .category-amount {
     font-size: 1.5em;
     font-weight: bold;
-    color: #e74c3c;
+    color: var(--danger-color);
+    transition: color 0.3s ease;
 }
 
 /* Entries List */
@@ -260,22 +371,23 @@ section h2 {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background-color: #f8f9fa;
+    background-color: var(--bg-tertiary);
     border-radius: 5px;
-    border-left: 4px solid #3498db;
-    transition: background-color 0.3s;
+    border-left: 4px solid var(--accent-color);
+    transition: background-color 0.3s, border-left-color 0.3s;
 }
 
 .entry-item:hover {
-    background-color: #ecf0f1;
+    background-color: var(--bg-secondary);
+    filter: brightness(1.1);
 }
 
 .entry-item.expense {
-    border-left-color: #e74c3c;
+    border-left-color: var(--danger-color);
 }
 
 .entry-item.income {
-    border-left-color: #27ae60;
+    border-left-color: var(--success-color);
 }
 
 .entry-info {
@@ -289,47 +401,53 @@ section h2 {
     display: flex;
     gap: 15px;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-header);
+    transition: color 0.3s ease;
 }
 
 .entry-date-time {
-    color: #7f8c8d;
+    color: var(--text-secondary);
     font-size: 0.9em;
+    transition: color 0.3s ease;
 }
 
 .entry-description {
-    color: #7f8c8d;
+    color: var(--text-secondary);
     font-size: 0.9em;
+    transition: color 0.3s ease;
 }
 
 .entry-type {
     display: inline-block;
-    background-color: #3498db;
+    background-color: var(--accent-color);
     color: white;
     padding: 3px 8px;
     border-radius: 3px;
     font-size: 0.8em;
+    transition: background-color 0.3s ease;
 }
 
 .entry-amount {
     font-size: 1.3em;
     font-weight: bold;
     margin-right: 15px;
+    transition: color 0.3s ease;
 }
 
 .entry-amount.expense {
-    color: #e74c3c;
+    color: var(--danger-color);
 }
 
 .entry-amount.income {
-    color: #27ae60;
+    color: var(--success-color);
 }
 
 .entry-balance {
     min-width: 120px;
     text-align: right;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--text-header);
+    transition: color 0.3s ease;
 }
 
 .entry-actions {
@@ -339,15 +457,21 @@ section h2 {
 
 .empty-message {
     text-align: center;
-    color: #7f8c8d;
+    color: var(--text-secondary);
     padding: 20px;
     font-style: italic;
+    transition: color 0.3s ease;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.8em;
+    }
+
+    .header-top {
+        flex-direction: column;
+        gap: 15px;
     }
 
     .summary-grid {
