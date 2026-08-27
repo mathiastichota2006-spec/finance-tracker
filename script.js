@@ -43,25 +43,32 @@ function initializeTheme() {
     const isDarkTheme = savedTheme ? savedTheme === 'dark' : prefersDark;
     
     if (isDarkTheme) {
+        document.documentElement.setAttribute('data-theme', 'dark');
         document.body.classList.add('dark-theme');
-        document.getElementById('themeToggle').checked = true;
-        updateThemeIcon(true);
+        updateThemeButton(true);
     } else {
+        document.documentElement.setAttribute('data-theme', 'light');
         document.body.classList.remove('dark-theme');
-        document.getElementById('themeToggle').checked = false;
-        updateThemeIcon(false);
+        updateThemeButton(false);
     }
 }
 
 function toggleTheme() {
     const isDarkTheme = document.body.classList.toggle('dark-theme');
-    document.getElementById('themeToggle').checked = isDarkTheme;
+    document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
     setCookie('theme', isDarkTheme ? 'dark' : 'light', 365);
-    updateThemeIcon(isDarkTheme);
+    updateThemeButton(isDarkTheme);
 }
 
-function updateThemeIcon(isDark) {
+function updateThemeButton(isDark) {
+    const button = document.getElementById('themeToggle');
     const icon = document.querySelector('.theme-icon');
+    
+    if (button) {
+        button.setAttribute('aria-pressed', isDark);
+        button.classList.toggle('dark-active', isDark);
+    }
+    
     if (icon) {
         icon.textContent = isDark ? '☀️' : '🌙';
     }
@@ -408,7 +415,7 @@ document.getElementById('addEntryBtn').addEventListener('click', addEntry);
 document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 document.getElementById('prevMonth').addEventListener('click', goToPreviousMonth);
 document.getElementById('nextMonth').addEventListener('click', goToNextMonth);
-document.getElementById('themeToggle').addEventListener('change', toggleTheme);
+document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
 // Initialize
 loadData();
