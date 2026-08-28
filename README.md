@@ -68,9 +68,9 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 Aplikace je plně funkční na:
 - ✅ Desktop prohlížečích (Chrome, Firefox, Safari, Edge)
 - ✅ Mobilních zařízeních
-- ✅ Offline režimu
+- ✅ Offline režim lze po stáhnutí této stránky a běhu přímo z úložiště počítače v prohlížeči.
 ## 📝 Poznámky
  
 - Data se ukládají v Local Storage vašeho prohlížeče
 - Vymazání cookies/cache prohlížeče smaže i vaše data
-- Pro zálohování si vezměte screenshot přehledu nebo exportujte seznam ručně
+- Pro zálohování si vezměte screenshot přehledu
