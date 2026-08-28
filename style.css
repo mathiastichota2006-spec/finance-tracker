@@ -73,16 +73,16 @@ header {
 
 .header-top {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     gap: 20px;
-    position: relative;
 }
 
 header h1 {
     font-size: 2.5em;
     text-align: center;
+    flex: 1;
 }
 
 /* Theme Toggle Button Styles */
@@ -101,8 +101,7 @@ header h1 {
     width: 50px;
     height: 50px;
     white-space: nowrap;
-    position: absolute;
-    right: 0;
+    flex-shrink: 0;
 }
 
 #themeToggle:hover {
@@ -129,6 +128,7 @@ header h1 {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .month-btn {
@@ -140,6 +140,8 @@ header h1 {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s;
+    flex: 1;
+    min-width: 100px;
 }
 
 .month-btn:hover {
@@ -463,19 +465,52 @@ section h2 {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        padding: 12px;
+    }
+
+    header {
+        padding: 20px 16px;
+        margin-bottom: 20px;
+    }
+
     header h1 {
         font-size: 1.8em;
+        margin: 0;
     }
 
     .header-top {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
     }
 
     #themeToggle {
-        width: 45px;
-        height: 45px;
-        position: static;
+        width: 44px;
+        height: 44px;
+        padding: 8px;
+        font-size: 1.2em;
+        flex-shrink: 0;
+    }
+
+    .month-selector {
+        gap: 8px;
+        width: 100%;
+    }
+
+    .month-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        min-width: 80px;
+        flex: 1;
+    }
+
+    .current-month {
+        font-size: 1.1em;
+        min-width: 140px;
+        flex-shrink: 0;
     }
 
     .summary-grid {
@@ -496,5 +531,71 @@ section h2 {
     .entry-balance,
     .entry-actions {
         align-self: flex-end;
+    }
+
+    .category-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    header {
+        padding: 16px 12px;
+        border-radius: 6px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .header-top {
+        gap: 8px;
+    }
+
+    #themeToggle {
+        width: 40px;
+        height: 40px;
+        padding: 6px;
+        font-size: 1.1em;
+    }
+
+    .month-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
+    }
+
+    .current-month {
+        font-size: 1em;
+        min-width: 120px;
+    }
+
+    .month-selector {
+        gap: 6px;
+    }
+
+    section {
+        padding: 16px;
+    }
+
+    section h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .category-list {
+        grid-template-columns: 1fr;
+    }
+
+    .entry-item {
+        padding: 12px;
+    }
+
+    .entry-amount {
+        margin-right: 10px;
+        font-size: 1.1em;
     }
 }
