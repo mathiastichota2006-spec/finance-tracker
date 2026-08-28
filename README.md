@@ -56,6 +56,7 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 - ⛽ Palivo
 - 🎬 Předplatné
 - 🚬 Tabák
+- Více se přidá časem.
 ## 💡 Tipy na použití
  
 - Pravidelně přidávejte položky pro lepší přehled
