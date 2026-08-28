@@ -73,16 +73,16 @@ header {
 
 .header-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
     gap: 20px;
+    position: relative;
 }
 
 header h1 {
     font-size: 2.5em;
     text-align: center;
-    flex: 1;
 }
 
 /* Theme Toggle Button Styles */
@@ -101,6 +101,8 @@ header h1 {
     width: 50px;
     height: 50px;
     white-space: nowrap;
+    position: absolute;
+    right: 0;
 }
 
 #themeToggle:hover {
@@ -473,6 +475,7 @@ section h2 {
     #themeToggle {
         width: 45px;
         height: 45px;
+        position: static;
     }
 
     .summary-grid {
