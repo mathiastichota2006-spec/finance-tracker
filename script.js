@@ -95,6 +95,79 @@ function saveData() {
     setCookie('financeTrackerData', dataString, 365); // Store for 1 year
 }
 
+// Export data as JSON
+function exportData() {
+    const dataString = JSON.stringify(data, null, 2);
+    const blob = new Blob([dataString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `financni-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert('Data byla úspěšně exportována!');
+}
+
+// Trigger file input for import
+function importData() {
+    document.getElementById('importFile').click();
+}
+
+// Handle file import
+function handleFileImport(event) {
+    const file = event.target.files[0];
+    
+    if (!file) {
+        return;
+    }
+    
+    // Validate file type
+    if (!file.name.endsWith('.json')) {
+        alert('Prosím vyberte JSON soubor');
+        return;
+    }
+    
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            // Validate the imported data structure
+            if (!importedData.months || typeof importedData.months !== 'object') {
+                alert('Neplatný formát souboru. Prosím vyberte správný exportovaný soubor.');
+                return;
+            }
+            
+            // Ask for confirmation before overwriting
+            if (confirm('Tímto budou všechny stávající data přepsána. Pokračovat?')) {
+                data = importedData;
+                saveData();
+                
+                // Reset current date to today
+                currentDate = new Date();
+                
+                // Re-render everything
+                updateMonthDisplay();
+                renderMonth();
+                
+                alert('Data byla úspěšně importována!');
+            }
+        } catch (error) {
+            alert('Chyba při čtení souboru: ' + error.message);
+        }
+    };
+    
+    reader.readAsText(file);
+    
+    // Reset file input so the same file can be selected again if needed
+    event.target.value = '';
+}
+
 // Get month key
 function getMonthKey(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -416,6 +489,9 @@ document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 document.getElementById('prevMonth').addEventListener('click', goToPreviousMonth);
 document.getElementById('nextMonth').addEventListener('click', goToNextMonth);
 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+document.getElementById('exportBtn').addEventListener('click', exportData);
+document.getElementById('importBtn').addEventListener('click', importData);
+document.getElementById('importFile').addEventListener('change', handleFileImport);
 
 // Initialize
 loadData();
