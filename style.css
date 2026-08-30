@@ -85,6 +85,46 @@ header h1 {
     flex: 1;
 }
 
+/* Header Actions Container */
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Action Buttons (Export/Import) */
+.action-btn {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.action-btn span {
+    font-size: 1.1em;
+}
+
+.action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
 /* Theme Toggle Button Styles */
 #themeToggle {
     background-color: rgba(255, 255, 255, 0.2);
@@ -480,11 +520,27 @@ section h2 {
     }
 
     .header-top {
-        flex-direction: row;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         margin-bottom: 15px;
+    }
+
+    .header-actions {
+        gap: 8px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-btn {
+        font-size: 0.85em;
+        padding: 8px 12px;
+        flex: 0 1 auto;
+    }
+
+    .action-btn span {
+        font-size: 1em;
     }
 
     #themeToggle {
@@ -553,7 +609,22 @@ section h2 {
     }
 
     .header-top {
+        flex-direction: column;
         gap: 8px;
+    }
+
+    .header-actions {
+        gap: 6px;
+        width: 100%;
+    }
+
+    .action-btn {
+        font-size: 0.75em;
+        padding: 6px 10px;
+    }
+
+    .action-btn span {
+        font-size: 0.9em;
     }
 
     #themeToggle {
