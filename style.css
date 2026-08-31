@@ -386,6 +386,11 @@ section h2 {
     transition: background-color 0.3s ease, border-left-color 0.3s ease;
 }
 
+/* Income category styling */
+.category-item.income-category {
+    border-left-color: var(--success-color);
+}
+
 .category-name {
     font-weight: 600;
     color: var(--text-header);
@@ -397,6 +402,10 @@ section h2 {
     font-weight: bold;
     color: var(--danger-color);
     transition: color 0.3s ease;
+}
+
+.category-amount.income {
+    color: var(--success-color);
 }
 
 /* Entries List */
