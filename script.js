@@ -357,6 +357,7 @@ function renderMonth() {
     const monthData = getMonthData(currentDate);
     
     renderSummary(monthData);
+    renderIncomeCategoryBreakdown(monthData);
     renderCategoryBreakdown(monthData);
     renderEntriesList(monthData);
 }
@@ -390,6 +391,40 @@ function renderSummary(entries) {
     document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
     document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
     document.getElementById('currentBalance').textContent = formatCurrency(currentBalance);
+}
+
+// Render income category breakdown - sorted by total income
+function renderIncomeCategoryBreakdown(entries) {
+    const categories = {};
+
+    entries.forEach(entry => {
+        if (entry.amount > 0) { // Only income
+            if (!categories[entry.type]) {
+                categories[entry.type] = 0;
+            }
+            categories[entry.type] += entry.amount;
+        }
+    });
+
+    const breakdownDiv = document.getElementById('incomeCategoryBreakdown');
+    breakdownDiv.innerHTML = '';
+
+    if (Object.keys(categories).length === 0) {
+        breakdownDiv.innerHTML = '<div class="empty-message">Zatím bez příjmů</div>';
+        return;
+    }
+
+    Object.entries(categories)
+        .sort((a, b) => b[1] - a[1]) // Sort by total income descending
+        .forEach(([category, amount]) => {
+            const categoryItem = document.createElement('div');
+            categoryItem.className = 'category-item income-category';
+            categoryItem.innerHTML = `
+                <div class="category-name">${category}</div>
+                <div class="category-amount income">${formatCurrency(amount)}</div>
+            `;
+            breakdownDiv.appendChild(categoryItem);
+        });
 }
 
 // Render category breakdown - sorted by total expenses
