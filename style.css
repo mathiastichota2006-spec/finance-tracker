@@ -173,6 +173,13 @@ header h1 {
     width: 100%;
 }
 
+.month-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+}
+
 .month-btn {
     background-color: var(--accent-color);
     color: white;
@@ -183,7 +190,7 @@ header h1 {
     font-size: 0.95em;
     transition: background-color 0.3s;
     white-space: nowrap;
-    flex: 1;
+    flex: 1 1 0;
     min-width: 0;
 }
 
@@ -196,7 +203,6 @@ header h1 {
     font-weight: bold;
     text-align: center;
     flex-shrink: 0;
-    margin-top: 25%;
 }
 
 main {
@@ -571,10 +577,14 @@ section h2 {
         align-items: center;
     }
 
+    .month-nav {
+        gap: 8px;
+    }
+
     .month-btn {
         padding: 8px 10px;
         font-size: 0.85em;
-        flex: 1;
+        flex: 1 1 0;
         min-width: 0;
     }
 
@@ -582,7 +592,6 @@ section h2 {
         font-size: 1.1em;
         min-width: auto;
         flex-shrink: 0;
-        margin-top: 25%;
     }
 
     .summary-grid {
@@ -657,17 +666,20 @@ section h2 {
         align-items: center;
     }
 
+    .month-nav {
+        gap: 6px;
+    }
+
     .month-btn {
         padding: 6px 8px;
         font-size: 0.8em;
-        flex: 1;
+        flex: 1 1 0;
         min-width: 0;
     }
 
     .current-month {
         font-size: 0.95em;
         min-width: auto;
-        margin-top: 25%;
     }
 
     section {
