@@ -3,6 +3,8 @@ let data = {
     months: {}
 };
 
+const STARTING_BALANCE_TYPE = 'Počáteční zůstatek';
+
 const monthNames = [
     'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
     'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'
@@ -196,6 +198,36 @@ function formatTime24(time) {
     return time;
 }
 
+function isStartingBalanceEntry(entry) {
+    return entry.type === STARTING_BALANCE_TYPE;
+}
+
+function isIncomeType(type) {
+    return type === 'Pravidelný příjem' || type === 'Nepravidelný příjem' || type === STARTING_BALANCE_TYPE;
+}
+
+function getEffectiveStartingBalanceEntry(entries) {
+    const startingEntries = entries.filter(e => isStartingBalanceEntry(e) && e.amount > 0);
+
+    if (startingEntries.length === 0) {
+        return null;
+    }
+
+    return startingEntries.reduce((latest, current) => {
+        const latestDate = new Date(`${latest.date}T${latest.time}`);
+        const currentDate = new Date(`${current.date}T${current.time}`);
+        return currentDate > latestDate ? current : latest;
+    });
+}
+
+function removeOlderStartingBalanceEntries(entries, keepId) {
+    for (let i = entries.length - 1; i >= 0; i--) {
+        if (isStartingBalanceEntry(entries[i]) && entries[i].id !== keepId) {
+            entries.splice(i, 1);
+        }
+    }
+}
+
 // Update month display
 function updateMonthDisplay() {
     const month = monthNames[currentDate.getMonth()];
@@ -277,20 +309,21 @@ function addEntry() {
         const entryDate = new Date(date);
         const monthData = getMonthData(entryDate);
 
-        // Determine if it's income or expense
-        const isIncome = type === 'Pravidelný příjem' || type === 'Nepravidelný příjem';
-        
         const entry = {
             id: Date.now(),
             date: date,
             time: formatTime24(time), // Ensure 24-hour format
             description: description,
             type: type,
-            amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
+            amount: isIncomeType(type) ? Math.abs(amount) : -Math.abs(amount)
         };
 
         monthData.push(entry);
         monthData.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+        if (isStartingBalanceEntry(entry)) {
+            removeOlderStartingBalanceEntries(monthData, entry.id);
+        }
 
         saveData();
         clearForm();
@@ -312,9 +345,6 @@ function updateEntry(entryId, oldDate, newDate, time, description, type, amount)
         oldMonthData.splice(index, 1);
     }
     
-    // Determine if it's income or expense
-    const isIncome = type === 'Pravidelný příjem' || type === 'Nepravidelný příjem';
-    
     // Create updated entry
     const updatedEntry = {
         id: entryId,
@@ -322,12 +352,16 @@ function updateEntry(entryId, oldDate, newDate, time, description, type, amount)
         time: formatTime24(time),
         description: description,
         type: type,
-        amount: isIncome ? Math.abs(amount) : -Math.abs(amount)
+        amount: isIncomeType(type) ? Math.abs(amount) : -Math.abs(amount)
     };
     
     // Add to new month
     newMonthData.push(updatedEntry);
     newMonthData.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+    if (isStartingBalanceEntry(updatedEntry)) {
+        removeOlderStartingBalanceEntries(newMonthData, entryId);
+    }
     
     saveData();
 }
@@ -367,25 +401,24 @@ function renderSummary(entries) {
     let startingBalance = 0;
     let totalIncome = 0;
     let totalExpenses = 0;
-    let currentBalance = 0;
 
-    // Find starting balance entry
-    const startEntry = entries.find(e => e.description.toLowerCase().includes('počáteční zůstatek'));
-    if (startEntry && startEntry.amount > 0) {
+    const startEntry = getEffectiveStartingBalanceEntry(entries);
+    if (startEntry) {
         startingBalance = startEntry.amount;
-        currentBalance = startingBalance;
     }
 
-    // Calculate totals
+    // Calculate totals (excluding starting balance from regular income totals)
     entries.forEach(entry => {
         if (entry.amount > 0) {
-            totalIncome += entry.amount;
-            currentBalance += entry.amount;
+            if (!isStartingBalanceEntry(entry)) {
+                totalIncome += entry.amount;
+            }
         } else {
             totalExpenses += Math.abs(entry.amount);
-            currentBalance += entry.amount;
         }
     });
+
+    const currentBalance = startingBalance + totalIncome - totalExpenses;
 
     document.getElementById('startingBalance').textContent = formatCurrency(startingBalance);
     document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
@@ -398,7 +431,7 @@ function renderIncomeCategoryBreakdown(entries) {
     const categories = {};
 
     entries.forEach(entry => {
-        if (entry.amount > 0) { // Only income
+        if (entry.amount > 0 && !isStartingBalanceEntry(entry)) { // Only income, exclude starting balance
             if (!categories[entry.type]) {
                 categories[entry.type] = 0;
             }
@@ -471,19 +504,16 @@ function renderEntriesList(entries) {
         return;
     }
 
-    let runningBalance = 0;
-    // Find starting balance if it exists
-    const startEntry = entries.find(e => e.description.toLowerCase().includes('počáteční zůstatek'));
-    if (startEntry && startEntry.amount > 0) {
-        runningBalance = startEntry.amount;
-    }
+    const startEntry = getEffectiveStartingBalanceEntry(entries);
+    let runningBalance = startEntry ? startEntry.amount : 0;
 
     entries.forEach(entry => {
-        runningBalance += entry.amount;
+        if (!isStartingBalanceEntry(entry)) {
+            runningBalance += entry.amount;
+        }
         
         const entryDiv = document.createElement('div');
         const isIncome = entry.amount > 0;
-        const isStarting = entry.description.toLowerCase().includes('počáteční zůstatek');
         
         entryDiv.className = `entry-item ${isIncome ? 'income' : 'expense'}`;
         entryDiv.innerHTML = `
