@@ -1,13 +1,13 @@
 # 💰 Finanční Tracker
 
-Jednoduché a přehledné webové řešení pro sledování vašich výdajů a příjmů. Aplikace vám pomáhá udržet si přehled o penězích s intuitivním rozhraním a okamžitými statistikami. Veškerá data zůstávají pouze v prohlížeči – nejde o žádný online servis, takže vaše finanční údaje jsou vždy jen vaše.
+Jednoduché a přehledné webové řešení pro sledování vašich výdajů a příjmů. Aplikace vám pomáhá udržet si přehled o penězích s intuitivním rozhraním a okamžitými statistikami.
 
 ## ✨ Co můžete dělat v aplikaci
 
 ### 📊 Správa Financí
 - **Přidávání položek** – Jednoduše zaznamenávejte své výdaje a příjmy s datem, časem, popisem a částkou
 - **Kategorizace výdajů** – Sledování výdajů podle kategorií (Doprava, Elektronika, Hry, Nákupy, Online nákupy, Palivo, Předplatné, Restaurace & Fast Food, Tabák)
-- **Kategorizace příjmů** – Oddělené kategorie pro Pravidelný příjem a Nepravidelný příjem
+- **Kategorizace příjmů** – Oddělené kategorie pro Pravidelný příjem, Nepravidelný příjem a Počáteční zůstatek
 - **Úpravy a mazání** – Můžete upravit nebo smazat jakoukoliv zadanou položku
 
 ### 📈 Přehled Výdajů dle Kategorií
@@ -17,6 +17,7 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 ### 💰 Přehled Příjmů dle Kategorií
 - **Příjmy podle kategorií** – Přehled všech vašich příjmů rozdělených na Pravidelný příjem a Nepravidelný příjem
 - **Sledování příjmů** – Jasné rozlišení mezi pravidelným příjmem (např. plat) a mimořádnými příjmy (dary, bonusy, atd.)
+- **Počáteční zůstatek měsíce** – Pro každý měsíc můžete nastavit výchozí stav peněz, od kterého se počítá aktuální zůstatek
 
 ### 📋 Seznamy a Přehledy
 - **Přehled zůstatku** – Zobrazení počátečního zůstatku, celkových příjmů, výdajů a aktuálního stavu na konci měsíce
@@ -40,12 +41,21 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 ## 🚀 Začínáme
 
 1. Navštivte: https://mathiastichota2006-spec.github.io/finance-tracker/
-2. Zadejte počáteční zůstatek (volitelně)
+2. (Volitelně) nastavte **Počáteční zůstatek** jako první položku měsíce
 3. Začněte přidávat vaše výdaje a příjmy
 4. Sledujte svůj přehled v reálném čase
 5. Exportujte si data pro zálohování, když chcete
 
 ## 📝 Jak Používat
+
+### Nastavení Počátečního Zůstatku
+1. Otevřete měsíc, pro který chcete nastavit výchozí stav.
+2. V sekci **Přidat položku** vyplňte datum, čas a částku.
+3. Do pole **Popis** napište například „Počáteční zůstatek".
+4. V poli **Typ** vyberte **Počáteční zůstatek**.
+5. Klikněte na **Přidat**.
+
+> Poznámka: V každém měsíci je aktivní pouze poslední zadaný počáteční zůstatek.
 
 ### Přidání Nové Položky
 1. Klikněte na sekci "Přidat položku"
@@ -53,7 +63,7 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
    - **Datum** – Den transakce
    - **Čas** – Čas transakce
    - **Popis** – Co byl výdaj/příjem
-   - **Typ** – Vyberte kategorii (např. Doprava, Elektronika, Příjem)
+   - **Typ** – Vyberte kategorii (např. Doprava, Elektronika, Pravidelný příjem)
    - **Částka** – Kolik Kč
 3. Klikněte "Přidat"
 
@@ -73,6 +83,14 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 - Klikněte na tlačítko "📂 Import" a vyberte dříve exportovaný JSON soubor
 - Data se budou promptem aktualizovat na importovaná
 
+#### Import Počátečního Zůstatku přes JSON
+Pokud chcete přenést počáteční zůstatek mezi zařízeními:
+- nastavte v aplikaci položku typu **Počáteční zůstatek**,
+- proveďte standardní export,
+- na druhém zařízení proveďte standardní import.
+
+Po importu se počáteční zůstatek načte automaticky pro příslušný měsíc.
+
 ## 📋 Podporované Kategorie
 
 ### Výdaje
@@ -89,6 +107,7 @@ Jednoduché a přehledné webové řešení pro sledování vašich výdajů a p
 ### Příjmy
 - 💰 Pravidelný příjem (plat, stipendium, atd.)
 - 💸 Nepravidelný příjem (dary, bonusy, atd.)
+- 🧾 Počáteční zůstatek (výchozí stav měsíce)
 
 ## 📜 Licence – AGPLv3
 
